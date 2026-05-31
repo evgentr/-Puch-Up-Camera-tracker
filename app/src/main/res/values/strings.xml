@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Pushup Minutes</string>
+    <string name="onboarding_title">Get ready</string>
+    <string name="onboarding_body">Enable permissions and start earning minutes with pushups.</string>
+    <string name="onboarding_cta">Continue</string>
+    <string name="minutes_title">Minutes earned</string>
+    <string name="pushup_title">Pushup counter</string>
+    <string name="pushup_hint">Camera preview will appear here.</string>
+    <string name="pushup_add">Add 1 pushup</string>
+    <string name="pushup_camera_needed">Camera permission is required to count pushups.</string>
+    <string name="pushup_camera_button">Enable camera</string>
+    <string name="pushup_camera_settings">Open app settings</string>
+    <string name="pushup_reps">Reps: %1$d</string>
+    <string name="pushup_status_ok">Pose detected</string>
+    <string name="pushup_status_adjust">Adjust position</string>
+    <string name="calibration_show">Calibration mode</string>
+    <string name="calibration_hide">Hide calibration</string>
+    <string name="calibration_title">Calibration</string>
+    <string name="calibration_body">Place the phone low and keep shoulders, elbows, and wrists in frame.</string>
+    <string name="times_up_title">Time is up</string>
+    <string name="times_up_body">Time to train.</string>
+    <string name="permission_camera_needed">Camera permission required for pushup counting.</string>
+    <string name="permission_camera_granted">Camera permission granted.</string>
+    <string name="permission_camera_button">Grant camera</string>
+    <string name="permission_usage_needed">Usage access required to monitor apps.</string>
+    <string name="permission_usage_granted">Usage access granted.</string>
+    <string name="permission_usage_button">Open usage access</string>
+    <string name="permission_notifications_needed">Notifications permission recommended.</string>
+    <string name="permission_notifications_granted">Notifications enabled.</string>
+    <string name="permission_notifications_button">Grant notifications</string>
+    <string name="minutes_available">Minutes available: %1$d</string>
+    <string name="target_apps">Target apps:</string>
+    <string name="back">Back</string>
+    <string name="do_pushups">Do pushups</string>
+</resources>

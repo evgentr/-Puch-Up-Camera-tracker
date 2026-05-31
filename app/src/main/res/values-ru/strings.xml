@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Минуты за отжимания</string>
+    <string name="onboarding_title">Готовы начать</string>
+    <string name="onboarding_body">Разрешите доступ и зарабатывайте минуты отжиманиями.</string>
+    <string name="onboarding_cta">Продолжить</string>
+    <string name="minutes_title">Минуты</string>
+    <string name="pushup_title">Счетчик отжиманий</string>
+    <string name="pushup_hint">Здесь будет превью камеры.</string>
+    <string name="pushup_add">Добавить 1 отжимание</string>
+    <string name="pushup_camera_needed">Нужно разрешение камеры для подсчета отжиманий.</string>
+    <string name="pushup_camera_button">Включить камеру</string>
+    <string name="pushup_camera_settings">Открыть настройки приложения</string>
+    <string name="pushup_reps">Отжимания: %1$d</string>
+    <string name="pushup_status_ok">Поза распознана</string>
+    <string name="pushup_status_adjust">Отрегулируйте положение</string>
+    <string name="calibration_show">Режим калибровки</string>
+    <string name="calibration_hide">Скрыть калибровку</string>
+    <string name="calibration_title">Калибровка</string>
+    <string name="calibration_body">Поставьте телефон низко и держите плечи, локти и запястья в кадре.</string>
+    <string name="times_up_title">Время вышло</string>
+    <string name="times_up_body">Пора потренироваться.</string>
+    <string name="permission_camera_needed">Нужно разрешение камеры для подсчета отжиманий.</string>
+    <string name="permission_camera_granted">Камера разрешена.</string>
+    <string name="permission_camera_button">Разрешить камеру</string>
+    <string name="permission_usage_needed">Нужен доступ к использованию приложений.</string>
+    <string name="permission_usage_granted">Доступ к использованию предоставлен.</string>
+    <string name="permission_usage_button">Открыть доступ к использованию</string>
+    <string name="permission_notifications_needed">Разрешение на уведомления желательно.</string>
+    <string name="permission_notifications_granted">Уведомления включены.</string>
+    <string name="permission_notifications_button">Разрешить уведомления</string>
+    <string name="minutes_available">Доступно минут: %1$d</string>
+    <string name="target_apps">Целевые приложения:</string>
+    <string name="back">Назад</string>
+    <string name="do_pushups">Отжиматься</string>
+</resources>
