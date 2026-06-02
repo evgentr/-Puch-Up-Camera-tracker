@@ -5,7 +5,7 @@
     <string name="onboarding_cta">Продовжити</string>
     <string name="minutes_title">Хвилини</string>
     <string name="pushup_title">Лічильник віджимань</string>
-    <string name="pushup_hint">Тут буде прев'ю камери.</string>
+    <string name="pushup_hint"><![CDATA[Тут буде прев'ю камери.]]></string>
     <string name="pushup_add">Додати 1 віджимання</string>
     <string name="pushup_camera_needed">Потрібен дозвіл камери для підрахунку віджимань.</string>
     <string name="pushup_camera_button">Увімкнути камеру</string>
@@ -16,7 +16,7 @@
     <string name="calibration_show">Режим калібрування</string>
     <string name="calibration_hide">Сховати калібрування</string>
     <string name="calibration_title">Калібрування</string>
-    <string name="calibration_body">Поставте телефон низько та тримайте плечі, лікті й зап'ястя в кадрі.</string>
+    <string name="calibration_body"><![CDATA[Поставте телефон низько та тримайте плечі, лікті й зап'ястя в кадрі.]]></string>
     <string name="times_up_title">Час вийшов</string>
     <string name="times_up_body">Час потренуватися.</string>
     <string name="permission_camera_needed">Потрібен дозвіл камери для підрахунку віджимань.</string>
