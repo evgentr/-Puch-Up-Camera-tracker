@@ -12,7 +12,7 @@ PuchUp Camera Tracker is an Android app that helps limit time spent in selected 
 - Live camera preview with pose status and rep counter overlay.
 - Calibration mode to help position the camera.
 - Onboarding with permission prompts (camera, usage access, notifications).
-- Multilingual UI: English, Russian, Ukrainian.
+- Multilingual UI: English, Russian.
 
 ## Requirements
 - Android 13+ (API 33)
