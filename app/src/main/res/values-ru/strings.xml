@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Минуты за отжимания</string>
+    <string name="app_name">PuchUp Camera Tracker</string>
     <string name="onboarding_title">Готовы начать</string>
     <string name="onboarding_body">Разрешите доступ и зарабатывайте минуты отжиманиями.</string>
     <string name="onboarding_cta">Продолжить</string>

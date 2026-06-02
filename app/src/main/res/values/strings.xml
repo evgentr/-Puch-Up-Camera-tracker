@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pushup Minutes</string>
+    <string name="app_name">PuchUp Camera Tracker</string>
     <string name="onboarding_title">Get ready</string>
     <string name="onboarding_body">Enable permissions and start earning minutes with pushups.</string>
     <string name="onboarding_cta">Continue</string>

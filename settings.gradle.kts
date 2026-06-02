@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PushupMinutes"
+rootProject.name = "PuchUp Camera Tracker"
 include(":app")
