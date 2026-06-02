@@ -16,6 +16,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.PoseDetection
+import com.google.mlkit.vision.pose.PoseDetectorOptions
 import com.pushupminutes.pose.PoseAnalyzer
 import com.pushupminutes.pose.PushupDetector
 
@@ -28,7 +29,13 @@ fun PushupCamera(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context) }
-    val poseDetector = remember { PoseDetection.getClient() }
+    val poseDetector = remember {
+        PoseDetection.getClient(
+            PoseDetectorOptions.Builder()
+                .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
+                .build()
+        )
+    }
     val pushupDetector = remember { PushupDetector(onRep, onPoseStatus) }
     val poseAnalyzer = remember { PoseAnalyzer(poseDetector, pushupDetector) }
     val executor = remember { ContextCompat.getMainExecutor(context) }
