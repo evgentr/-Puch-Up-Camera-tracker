@@ -50,7 +50,6 @@ fun PushupScreen(
     var cameraGranted by remember { mutableStateOf(hasCameraPermission(context)) }
     var repCount by remember { mutableStateOf(0) }
     var inFrame by remember { mutableStateOf(false) }
-    var showCalibration by remember { mutableStateOf(false) }
     var useFrontCamera by remember { mutableStateOf(true) }
     val actionButtonColors = ButtonDefaults.buttonColors(
         containerColor = Color(0xFF2E7D32),
@@ -136,37 +135,12 @@ fun PushupScreen(
                     )
                 }
 
-                if (showCalibration) {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                            .padding(12.dp)
-                            .background(Color(0x99000000))
-                            .padding(8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.calibration_title),
-                            color = Color.White
-                        )
-                        Text(
-                            text = stringResource(R.string.calibration_body),
-                            color = Color.White
-                        )
-                    }
-                }
             }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Button(onClick = { showCalibration = !showCalibration }, colors = actionButtonColors) {
-                    Text(
-                        text = stringResource(
-                            if (showCalibration) R.string.calibration_hide else R.string.calibration_show
-                        )
-                    )
-                }
                 Button(onClick = { useFrontCamera = !useFrontCamera }, colors = actionButtonColors) {
                     Text(text = stringResource(R.string.camera_switch))
                 }

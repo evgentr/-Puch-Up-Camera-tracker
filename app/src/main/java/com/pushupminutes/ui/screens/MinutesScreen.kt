@@ -22,13 +22,13 @@ fun MinutesScreen(minutes: Int, onBack: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Minutes available: $minutes", style = MaterialTheme.typography.headlineMedium)
-        Text(text = "Target apps:", style = MaterialTheme.typography.titleMedium)
+        Text(text = stringResource(R.string.minutes_available, minutes), style = MaterialTheme.typography.headlineMedium)
+        Text(text = stringResource(R.string.target_apps), style = MaterialTheme.typography.titleMedium)
         TargetApps.defaults.forEach { app ->
             Text(text = "- ${app.label}")
         }
         Button(onClick = onBack) {
-            Text(text = "Back")
+            Text(text = stringResource(R.string.back))
         }
     }
 }

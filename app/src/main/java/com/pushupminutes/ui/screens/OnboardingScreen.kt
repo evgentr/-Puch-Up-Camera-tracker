@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -64,9 +66,13 @@ fun OnboardingScreen(onContinue: () -> Unit) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(24.dp),
         verticalArrangement = Arrangement.Top
     ) {
+        val textColor = Color(0xFF1B5E20)
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(24.dp)
@@ -75,26 +81,37 @@ fun OnboardingScreen(onContinue: () -> Unit) {
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text(text = stringResource(R.string.onboarding_title), style = MaterialTheme.typography.headlineMedium)
-                Text(text = stringResource(R.string.onboarding_body), style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = stringResource(R.string.onboarding_title),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = textColor
+                )
+                Text(
+                    text = stringResource(R.string.onboarding_body),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = textColor
+                )
 
                 Text(
                     text = stringResource(
                         if (cameraGranted) R.string.permission_camera_granted else R.string.permission_camera_needed
                     ),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = textColor
                 )
                 Text(
                     text = stringResource(
                         if (usageGranted) R.string.permission_usage_granted else R.string.permission_usage_needed
                     ),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = textColor
                 )
                 Text(
                     text = stringResource(
                         if (notificationsGranted) R.string.permission_notifications_granted else R.string.permission_notifications_needed
                     ),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = textColor
                 )
             }
 

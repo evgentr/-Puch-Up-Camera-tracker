@@ -14,25 +14,43 @@ class PushupDetector(
     private var lastRepAtMs = 0L
 
     private val downAngle = 120f
-    private val upAngle = 145f
+    private val upAngle = 150f
     private val minConfidence = 0.3f
-    private val requiredFrames = 1
-    private val minRepIntervalMs = 450L
+    private val requiredFrames = 2
+    private val minRepIntervalMs = 500L
+    private val minBodyAngle = 150f
+    private val downArmRatio = 0.82f
+    private val upArmRatio = 0.95f
 
     fun onPose(pose: Pose) {
-        val arm = pickBestArm(pose)
+        val arm = pickBestSide(pose)
         if (arm == null) {
             onStatus(false)
             return
         }
 
-        val inFrame = hasConfidence(minConfidence, arm.shoulder, arm.elbow, arm.wrist)
+        val inFrame = hasConfidence(
+            minConfidence,
+            arm.shoulder,
+            arm.elbow,
+            arm.wrist,
+            arm.hip,
+            arm.ankle
+        )
         onStatus(inFrame)
         if (!inFrame) return
 
-        val angle = angle(toPoint(arm.shoulder), toPoint(arm.elbow), toPoint(arm.wrist))
-        val down = angle < downAngle
-        val up = angle > upAngle
+        val elbowAngle = angle(toPoint(arm.shoulder), toPoint(arm.elbow), toPoint(arm.wrist))
+        val bodyAngle = angle(toPoint(arm.shoulder), toPoint(arm.hip), toPoint(arm.ankle))
+        val armLength = distance(toPoint(arm.shoulder), toPoint(arm.elbow)) +
+            distance(toPoint(arm.elbow), toPoint(arm.wrist))
+        val shoulderToWrist = distance(toPoint(arm.shoulder), toPoint(arm.wrist))
+        val armRatio = if (armLength == 0f) 1f else shoulderToWrist / armLength
+
+        if (bodyAngle < minBodyAngle) return
+
+        val down = elbowAngle < downAngle && armRatio < downArmRatio
+        val up = elbowAngle > upAngle && armRatio > upArmRatio
 
         if (down) {
             downFrames += 1
@@ -71,14 +89,22 @@ class PushupDetector(
         val cos = (dot / (ab * cb)).coerceIn(-1f, 1f)
         return Math.toDegrees(kotlin.math.acos(cos).toDouble()).toFloat()
     }
+
+    private fun distance(a: PosePoint, b: PosePoint): Float {
+        val dx = a.x - b.x
+        val dy = a.y - b.y
+        return kotlin.math.sqrt(dx * dx + dy * dy)
+    }
 }
 
 data class PosePoint(val x: Float, val y: Float)
 
-private data class ArmLandmarks(
+private data class SideLandmarks(
     val shoulder: PoseLandmark,
     val elbow: PoseLandmark,
-    val wrist: PoseLandmark
+    val wrist: PoseLandmark,
+    val hip: PoseLandmark,
+    val ankle: PoseLandmark
 )
 
 private fun toPoint(landmark: PoseLandmark): PosePoint {
@@ -89,32 +115,40 @@ private fun hasConfidence(minConfidence: Float, vararg landmarks: PoseLandmark):
     return landmarks.all { it.inFrameLikelihood >= minConfidence }
 }
 
-private fun pickBestArm(pose: Pose): ArmLandmarks? {
-    val left = armOrNull(
+private fun pickBestSide(pose: Pose): SideLandmarks? {
+    val left = sideOrNull(
         pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER),
         pose.getPoseLandmark(PoseLandmark.LEFT_ELBOW),
-        pose.getPoseLandmark(PoseLandmark.LEFT_WRIST)
+        pose.getPoseLandmark(PoseLandmark.LEFT_WRIST),
+        pose.getPoseLandmark(PoseLandmark.LEFT_HIP),
+        pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE)
     )
-    val right = armOrNull(
+    val right = sideOrNull(
         pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER),
         pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW),
-        pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)
+        pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST),
+        pose.getPoseLandmark(PoseLandmark.RIGHT_HIP),
+        pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE)
     )
 
     if (left == null && right == null) return null
     if (left == null) return right
     if (right == null) return left
 
-    val leftScore = left.shoulder.inFrameLikelihood + left.elbow.inFrameLikelihood + left.wrist.inFrameLikelihood
-    val rightScore = right.shoulder.inFrameLikelihood + right.elbow.inFrameLikelihood + right.wrist.inFrameLikelihood
+    val leftScore = left.shoulder.inFrameLikelihood + left.elbow.inFrameLikelihood + left.wrist.inFrameLikelihood +
+        left.hip.inFrameLikelihood + left.ankle.inFrameLikelihood
+    val rightScore = right.shoulder.inFrameLikelihood + right.elbow.inFrameLikelihood + right.wrist.inFrameLikelihood +
+        right.hip.inFrameLikelihood + right.ankle.inFrameLikelihood
     return if (rightScore > leftScore) right else left
 }
 
-private fun armOrNull(
+private fun sideOrNull(
     shoulder: PoseLandmark?,
     elbow: PoseLandmark?,
-    wrist: PoseLandmark?
-): ArmLandmarks? {
-    if (shoulder == null || elbow == null || wrist == null) return null
-    return ArmLandmarks(shoulder, elbow, wrist)
+    wrist: PoseLandmark?,
+    hip: PoseLandmark?,
+    ankle: PoseLandmark?
+): SideLandmarks? {
+    if (shoulder == null || elbow == null || wrist == null || hip == null || ankle == null) return null
+    return SideLandmarks(shoulder, elbow, wrist, hip, ankle)
 }
