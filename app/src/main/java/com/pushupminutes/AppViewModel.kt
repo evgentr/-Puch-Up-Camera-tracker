@@ -3,6 +3,9 @@ package com.pushupminutes
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import com.pushupminutes.data.LanguageStore
 import com.pushupminutes.data.MinutesStore
 import com.pushupminutes.monitor.UsageMonitor
 import com.pushupminutes.notifications.NotificationHelper
@@ -25,11 +28,13 @@ enum class Screen {
 data class AppUiState(
     val minutes: Int = 0,
     val screen: Screen = Screen.ONBOARDING,
-    val encouragement: String = "Keep going"
+    val encouragement: String = "Keep going",
+    val languageTag: String = "en"
 )
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val minutesStore = MinutesStore(application)
+    private val languageStore = LanguageStore(application)
     private val usageMonitor = UsageMonitor(application)
     private val notificationHelper = NotificationHelper(application)
     private val _uiState = MutableStateFlow(AppUiState())
@@ -51,6 +56,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
 
+        viewModelScope.launch {
+            languageStore.languageFlow.collect { tag ->
+                applyLanguage(tag)
+                _uiState.update { state -> state.copy(languageTag = tag) }
+            }
+        }
+
         startMonitorLoop()
     }
 
@@ -64,6 +76,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             val next = encouragements.random()
             _uiState.update { it.copy(encouragement = next) }
         }
+    }
+
+    fun toggleLanguage() {
+        viewModelScope.launch {
+            val next = if (_uiState.value.languageTag == "en") "ru" else "en"
+            languageStore.setLanguage(next)
+        }
+    }
+
+    private fun applyLanguage(tag: String) {
+        val locales = LocaleListCompat.forLanguageTags(tag)
+        AppCompatDelegate.setApplicationLocales(locales)
     }
 
     private fun startMonitorLoop() {

@@ -24,6 +24,7 @@ import com.pushupminutes.pose.PushupDetector
 fun PushupCamera(
     onRep: () -> Unit,
     onPoseStatus: (Boolean) -> Unit = {},
+    useFrontCamera: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -63,16 +64,20 @@ fun PushupCamera(
                         mediaImage,
                         imageProxy.imageInfo.rotationDegrees
                     )
-                    poseAnalyzer.process(image)
+                    poseAnalyzer.process(
+                        image,
+                        onComplete = { imageProxy.close() }
+                    )
+                } else {
+                    imageProxy.close()
                 }
-                imageProxy.close()
             }
 
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     lifecycleOwner,
-                    CameraSelector.DEFAULT_FRONT_CAMERA,
+                    if (useFrontCamera) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA,
                     preview,
                     imageAnalysis
                 )

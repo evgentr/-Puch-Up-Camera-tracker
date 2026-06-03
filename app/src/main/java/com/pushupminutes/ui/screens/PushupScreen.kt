@@ -39,6 +39,8 @@ import com.pushupminutes.permissions.openAppSettings
 fun PushupScreen(
     minutes: Int,
     encouragement: String,
+    languageTag: String,
+    onToggleLanguage: () -> Unit,
     onAddPushup: () -> Unit,
     onShowMinutes: () -> Unit
 ) {
@@ -48,6 +50,7 @@ fun PushupScreen(
     var repCount by remember { mutableStateOf(0) }
     var inFrame by remember { mutableStateOf(false) }
     var showCalibration by remember { mutableStateOf(false) }
+    var useFrontCamera by remember { mutableStateOf(true) }
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {
@@ -65,10 +68,24 @@ fun PushupScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF7F7F7))
+            .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(text = stringResource(R.string.pushup_title), style = MaterialTheme.typography.headlineMedium)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(R.string.pushup_title), style = MaterialTheme.typography.headlineMedium)
+            Button(onClick = onToggleLanguage) {
+                Text(
+                    text = if (languageTag == "en") stringResource(R.string.language_ru) else stringResource(R.string.language_en)
+                )
+            }
+        }
         Text(text = "${stringResource(R.string.minutes_title)}: $minutes", style = MaterialTheme.typography.titleLarge)
         Text(text = encouragement, style = MaterialTheme.typography.bodyLarge)
 
@@ -84,6 +101,7 @@ fun PushupScreen(
                         onAddPushup()
                     },
                     onPoseStatus = { inFrame = it },
+                    useFrontCamera = useFrontCamera,
                     modifier = Modifier.matchParentSize()
                 )
 
@@ -136,6 +154,9 @@ fun PushupScreen(
                             if (showCalibration) R.string.calibration_hide else R.string.calibration_show
                         )
                     )
+                }
+                Button(onClick = { useFrontCamera = !useFrontCamera }) {
+                    Text(text = stringResource(R.string.camera_switch))
                 }
             }
         } else {

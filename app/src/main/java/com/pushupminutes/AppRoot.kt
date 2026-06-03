@@ -19,6 +19,8 @@ fun AppRoot(viewModel: AppViewModel) {
         Screen.PUSHUPS -> PushupScreen(
             minutes = uiState.minutes,
             encouragement = uiState.encouragement,
+            languageTag = uiState.languageTag,
+            onToggleLanguage = { viewModel.toggleLanguage() },
             onAddPushup = { viewModel.addPushup() },
             onShowMinutes = { viewModel.goTo(Screen.MINUTES) }
         )

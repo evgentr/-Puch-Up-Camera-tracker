@@ -32,4 +32,7 @@
     <string name="target_apps">Целевые приложения:</string>
     <string name="back">Назад</string>
     <string name="do_pushups">Отжиматься</string>
+    <string name="language_en">EN</string>
+    <string name="language_ru">RU</string>
+    <string name="camera_switch">Сменить камеру</string>
 </resources>

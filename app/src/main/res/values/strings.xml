@@ -32,4 +32,7 @@
     <string name="target_apps">Target apps:</string>
     <string name="back">Back</string>
     <string name="do_pushups">Do pushups</string>
+    <string name="language_en">EN</string>
+    <string name="language_ru">RU</string>
+    <string name="camera_switch">Switch camera</string>
 </resources>
