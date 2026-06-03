@@ -13,31 +13,24 @@ class PushupDetector(
     private var upFrames = 0
     private var lastRepAtMs = 0L
 
-    private val downAngle = 80f
-    private val upAngle = 160f
-    private val minConfidence = 0.6f
-    private val requiredFrames = 3
-    private val minRepIntervalMs = 700L
+    private val downAngle = 100f
+    private val upAngle = 150f
+    private val minConfidence = 0.4f
+    private val requiredFrames = 2
+    private val minRepIntervalMs = 600L
 
     fun onPose(pose: Pose) {
-        val shoulder = pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER) ?: run {
-            onStatus(false)
-            return
-        }
-        val elbow = pose.getPoseLandmark(PoseLandmark.LEFT_ELBOW) ?: run {
-            onStatus(false)
-            return
-        }
-        val wrist = pose.getPoseLandmark(PoseLandmark.LEFT_WRIST) ?: run {
+        val arm = pickBestArm(pose)
+        if (arm == null) {
             onStatus(false)
             return
         }
 
-        val inFrame = hasConfidence(minConfidence, shoulder, elbow, wrist)
+        val inFrame = hasConfidence(minConfidence, arm.shoulder, arm.elbow, arm.wrist)
         onStatus(inFrame)
         if (!inFrame) return
 
-        val angle = angle(toPoint(shoulder), toPoint(elbow), toPoint(wrist))
+        val angle = angle(toPoint(arm.shoulder), toPoint(arm.elbow), toPoint(arm.wrist))
         val down = angle < downAngle
         val up = angle > upAngle
 
@@ -82,10 +75,46 @@ class PushupDetector(
 
 data class PosePoint(val x: Float, val y: Float)
 
+private data class ArmLandmarks(
+    val shoulder: PoseLandmark,
+    val elbow: PoseLandmark,
+    val wrist: PoseLandmark
+)
+
 private fun toPoint(landmark: PoseLandmark): PosePoint {
     return PosePoint(landmark.position.x, landmark.position.y)
 }
 
 private fun hasConfidence(minConfidence: Float, vararg landmarks: PoseLandmark): Boolean {
     return landmarks.all { it.inFrameLikelihood >= minConfidence }
+}
+
+private fun pickBestArm(pose: Pose): ArmLandmarks? {
+    val left = armOrNull(
+        pose.getPoseLandmark(PoseLandmark.LEFT_SHOULDER),
+        pose.getPoseLandmark(PoseLandmark.LEFT_ELBOW),
+        pose.getPoseLandmark(PoseLandmark.LEFT_WRIST)
+    )
+    val right = armOrNull(
+        pose.getPoseLandmark(PoseLandmark.RIGHT_SHOULDER),
+        pose.getPoseLandmark(PoseLandmark.RIGHT_ELBOW),
+        pose.getPoseLandmark(PoseLandmark.RIGHT_WRIST)
+    )
+
+    if (left == null && right == null) return null
+    if (left == null) return right
+    if (right == null) return left
+
+    val leftScore = left.shoulder.inFrameLikelihood + left.elbow.inFrameLikelihood + left.wrist.inFrameLikelihood
+    val rightScore = right.shoulder.inFrameLikelihood + right.elbow.inFrameLikelihood + right.wrist.inFrameLikelihood
+    return if (rightScore > leftScore) right else left
+}
+
+private fun armOrNull(
+    shoulder: PoseLandmark?,
+    elbow: PoseLandmark?,
+    wrist: PoseLandmark?
+): ArmLandmarks? {
+    if (shoulder == null || elbow == null || wrist == null) return null
+    return ArmLandmarks(shoulder, elbow, wrist)
 }
