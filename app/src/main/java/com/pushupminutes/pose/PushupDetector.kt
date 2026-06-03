@@ -13,11 +13,11 @@ class PushupDetector(
     private var upFrames = 0
     private var lastRepAtMs = 0L
 
-    private val downAngle = 100f
-    private val upAngle = 150f
-    private val minConfidence = 0.4f
-    private val requiredFrames = 2
-    private val minRepIntervalMs = 600L
+    private val downAngle = 120f
+    private val upAngle = 145f
+    private val minConfidence = 0.3f
+    private val requiredFrames = 1
+    private val minRepIntervalMs = 450L
 
     fun onPose(pose: Pose) {
         val arm = pickBestArm(pose)

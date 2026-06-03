@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,6 +52,10 @@ fun PushupScreen(
     var inFrame by remember { mutableStateOf(false) }
     var showCalibration by remember { mutableStateOf(false) }
     var useFrontCamera by remember { mutableStateOf(true) }
+    val actionButtonColors = ButtonDefaults.buttonColors(
+        containerColor = Color(0xFF2E7D32),
+        contentColor = Color.White
+    )
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {
@@ -80,11 +85,6 @@ fun PushupScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = stringResource(R.string.pushup_title), style = MaterialTheme.typography.headlineMedium)
-            Button(onClick = onToggleLanguage) {
-                Text(
-                    text = if (languageTag == "en") stringResource(R.string.language_ru) else stringResource(R.string.language_en)
-                )
-            }
         }
         Text(text = "${stringResource(R.string.minutes_title)}: $minutes", style = MaterialTheme.typography.titleLarge)
         Text(text = encouragement, style = MaterialTheme.typography.bodyLarge)
@@ -104,6 +104,18 @@ fun PushupScreen(
                     useFrontCamera = useFrontCamera,
                     modifier = Modifier.matchParentSize()
                 )
+
+                Button(
+                    onClick = onToggleLanguage,
+                    colors = actionButtonColors,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = if (languageTag == "en") stringResource(R.string.language_ru) else stringResource(R.string.language_en)
+                    )
+                }
 
                 Column(
                     modifier = Modifier
@@ -148,14 +160,14 @@ fun PushupScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Button(onClick = { showCalibration = !showCalibration }) {
+                Button(onClick = { showCalibration = !showCalibration }, colors = actionButtonColors) {
                     Text(
                         text = stringResource(
                             if (showCalibration) R.string.calibration_hide else R.string.calibration_show
                         )
                     )
                 }
-                Button(onClick = { useFrontCamera = !useFrontCamera }) {
+                Button(onClick = { useFrontCamera = !useFrontCamera }, colors = actionButtonColors) {
                     Text(text = stringResource(R.string.camera_switch))
                 }
             }

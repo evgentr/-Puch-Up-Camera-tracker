@@ -8,6 +8,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -42,7 +43,7 @@ fun PushupCamera(
     val executor = remember { ContextCompat.getMainExecutor(context) }
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
 
-    DisposableEffect(lifecycleOwner) {
+    LaunchedEffect(lifecycleOwner, useFrontCamera) {
         val listener = Runnable {
             val cameraProvider = cameraProviderFuture.get()
             previewView.scaleType = PreviewView.ScaleType.FILL_CENTER
@@ -86,7 +87,9 @@ fun PushupCamera(
         }
 
         cameraProviderFuture.addListener(listener, executor)
+    }
 
+    DisposableEffect(lifecycleOwner) {
         onDispose {
             poseDetector.close()
             runCatching { cameraProviderFuture.get().unbindAll() }

@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -64,51 +65,59 @@ fun OnboardingScreen(onContinue: () -> Unit) {
 
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Top
     ) {
-        Text(text = stringResource(R.string.onboarding_title), style = MaterialTheme.typography.headlineMedium)
-        Text(text = stringResource(R.string.onboarding_body), style = MaterialTheme.typography.bodyLarge)
-
-        Text(
-            text = stringResource(
-                if (cameraGranted) R.string.permission_camera_granted else R.string.permission_camera_needed
-            ),
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-        Button(onClick = { cameraLauncher.launch(Manifest.permission.CAMERA) }) {
-            Text(text = stringResource(R.string.permission_camera_button))
-        }
-
-        Text(
-            text = stringResource(
-                if (usageGranted) R.string.permission_usage_granted else R.string.permission_usage_needed
-            ),
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-        Button(onClick = { openUsageAccessSettings(context) }) {
-            Text(text = stringResource(R.string.permission_usage_button))
-        }
-
-        Text(
-            text = stringResource(
-                if (notificationsGranted) R.string.permission_notifications_granted else R.string.permission_notifications_needed
-            ),
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-        Button(onClick = { notificationsLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
-            Text(text = stringResource(R.string.permission_notifications_button))
-        }
-
-        Button(
-            onClick = onContinue,
-            enabled = cameraGranted && usageGranted,
-            modifier = Modifier.padding(top = 24.dp)
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Text(text = stringResource(R.string.onboarding_cta))
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(text = stringResource(R.string.onboarding_title), style = MaterialTheme.typography.headlineMedium)
+                Text(text = stringResource(R.string.onboarding_body), style = MaterialTheme.typography.bodyLarge)
+
+                Text(
+                    text = stringResource(
+                        if (cameraGranted) R.string.permission_camera_granted else R.string.permission_camera_needed
+                    ),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = stringResource(
+                        if (usageGranted) R.string.permission_usage_granted else R.string.permission_usage_needed
+                    ),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = stringResource(
+                        if (notificationsGranted) R.string.permission_notifications_granted else R.string.permission_notifications_needed
+                    ),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Button(onClick = { cameraLauncher.launch(Manifest.permission.CAMERA) }) {
+                    Text(text = stringResource(R.string.permission_camera_button))
+                }
+                Button(onClick = { openUsageAccessSettings(context) }) {
+                    Text(text = stringResource(R.string.permission_usage_button))
+                }
+                Button(onClick = { notificationsLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
+                    Text(text = stringResource(R.string.permission_notifications_button))
+                }
+                Button(
+                    onClick = onContinue,
+                    enabled = cameraGranted && usageGranted
+                ) {
+                    Text(text = stringResource(R.string.onboarding_cta))
+                }
+            }
         }
     }
 }
